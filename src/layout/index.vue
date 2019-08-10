@@ -3,9 +3,8 @@
 
     <!-- 头部 -->
     <el-header class="header">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
-               @select="handleSelect">
-        <el-menu-item index="1">
+      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item index="logo">
           <el-image
             style="width: 100px"
             src="https://i.loli.net/2019/08/08/hgHb9ERsu6t2jB7.png">
@@ -14,7 +13,7 @@
 
         <el-submenu index="user" style="float: right;">
           <template slot="title">
-            <el-avatar size="large" src="https://avatars1.githubusercontent.com/u/43307215?s=460&v=4"></el-avatar>
+            <el-avatar size="large" src="https://i.loli.net/2019/08/01/5d4277746b10245068.png"></el-avatar>
           </template>
           <el-menu-item index="home">个人中心</el-menu-item>
           <el-menu-item index="logout">退出当前账号</el-menu-item>
@@ -26,10 +25,21 @@
     <!--      中间部分-->
     <el-main>
 
-      <img src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg">
-      <img src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg">
-      <img src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg">
-
+      <el-row>
+        <el-col :span="8" v-for="video in video_data" :key="video.id" style="padding-bottom: 1%">
+          <el-card shadow="hover" :span="8">
+            <el-row :gutter="12">
+              <el-col :span="8">
+                标题：{{video.title}}<br>
+                作者：{{video.author}}<br>
+              </el-col>
+              <el-col :span="16">
+                <video src="http://127.0.0.1:8000/static/media/video/QQ20190726-210821-HD.mp4" style="width: 100px;"></video>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
     </el-main>
 
 
@@ -44,8 +54,8 @@
     name: "index",
     data() {
       return {
-        activeIndex: '1',
-        activeIndex2: '1'
+        activeIndex: 'logo',
+        video_data: [],
       };
     },
     methods: {
@@ -54,11 +64,12 @@
       }
     },
     mounted() {
-      // this.$http.get("http://127.0.0.1:8000/apis/video/all/").then(res => {
-      //   console.log(res)
-      // }, err => {
-      //   console.log(err)
-      // })
+      this.$http.get("http://127.0.0.1:8000/apis/video/all/").then(res => {
+        this.video_data = res.data.data;
+        console.log(res.data.data)
+      }, err => {
+        console.log(err)
+      })
     }
   }
 </script>
@@ -67,7 +78,7 @@
   .header {
     width: 100%;
     height: 30px;
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
     z-index: 200;

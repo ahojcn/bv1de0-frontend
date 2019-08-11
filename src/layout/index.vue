@@ -51,22 +51,25 @@
                       </div>
                     </el-card>
                   </el-col>
-                  <el-col :span="1"> </el-col>
+                  <el-col :span="1"></el-col>
                 </el-row>
               </el-col>
             </el-row>
 
           </el-card>
         </el-col>
-        <el-col :span="6">
+
+        <el-col :span="6" class="float_box">
           <el-row>
             <el-card shadow="hover">
               <div slot="header" class="clearfix">
               <span>
                 最新留言
-                <i class="el-icon-video-play"></i>
+                <i class="el-icon-chat-dot-square"></i>
               </span>
               </div>
+
+              {{new_comments}}
             </el-card>
           </el-row>
           <el-row>
@@ -74,15 +77,13 @@
               <div slot="header" class="clearfix">
               <span>
                 新成员
-                <i class="el-icon-video-play"></i>
+                <i class="el-icon-user"></i>
               </span>
               </div>
 
-              <div>
-                <span>青春是一个短暂的美梦, 当你醒来时, 它早已消失无踪</span>
-                <el-divider></el-divider>
-                <span>少量的邪恶足以抵消全部高贵的品质, 害得人声名狼藉</span>
-              </div>
+              <el-tooltip :content="user.motto" placement="top" v-for="user in new_users" :key="user.id">
+                <el-tag>{{user.username}}</el-tag>
+              </el-tooltip>
             </el-card>
           </el-row>
         </el-col>
@@ -92,7 +93,7 @@
 
 
     <!--      底部-->
-    <el-footer>&copy; bv1de0</el-footer>
+    <el-footer style="margin: 0 auto">&copy; bv1de0</el-footer>
 
   </el-container>
 </template>
@@ -104,6 +105,9 @@
       return {
         activeIndex: 'logo',
         video_data: [],
+        new_users: [],
+        new_comments: [],
+        user_tag_color: ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C']
       };
     },
     methods: {
@@ -112,20 +116,41 @@
       },
       goToVideo(video) {
         alert(video.id)
-      }
+      },
     },
     mounted() {
-      this.$http.get("http://127.0.0.1:8000/apis/video/all/").then(res => {
+      // 获取视频列表
+      this.$http.get("apis/video/all/").then(res => {
         this.video_data = res.data.data;
         console.log(res.data.data)
       }, err => {
         console.log(err)
-      })
+      });
+
+      // 获取最新用户
+      this.$http.get("apis/user/").then(res => {
+        this.new_users = res.data
+      }, err => {
+        console.log(err)
+      });
+
+      // 获取最新评论
+      this.$http.get("apis/comment/").then(res => {
+        this.new_comments = res.data
+      }, err => {
+        console.log(err)
+      });
     }
   }
 </script>
 
 <style scoped>
+  .float_box {
+    display: block;
+    position: fixed;
+    right: 0;
+  }
+
   .header {
     width: 100%;
     height: 30px;

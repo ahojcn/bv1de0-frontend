@@ -36,12 +36,13 @@
             </div>
 
             <el-row>
-              <el-col :span="8" v-for="video in video_data" :key="video.id" style="padding-bottom: 1%">
+              <el-col :span="5" v-for="video in video_data" :key="video.id" style="padding-bottom: 1%">
                 <el-row>
                   <el-col :span="23">
                     <el-card :body-style="{ padding: '0px' }" shadow="hover">
-                      <video src="http://127.0.0.1:8000/static/media/video/QQ20190726-210821-HD.mp4"
-                             class="image"></video>
+                      <video
+                        :src="'http://localhost:8000/' + video.file_url"
+                        class="image"></video>
                       <div style="padding: 14px;">
                         <span>{{video.title}}</span>
                         <div class="bottom clearfix">
@@ -59,7 +60,7 @@
           </el-card>
         </el-col>
 
-        <el-col :span="6" class="float_box">
+        <el-col :span="5" class="float_box">
           <el-row>
             <el-card shadow="hover">
               <div slot="header" class="clearfix">
@@ -81,8 +82,9 @@
               </span>
               </div>
 
-              <el-tooltip :content="user.motto" placement="top" v-for="user in new_users" :key="user.id">
-                <el-tag>{{user.username}}</el-tag>
+              <el-tooltip placement="top" v-for="user in new_users" :key="user.id">
+                <el-avatar size="medium" :src=" 'http://127.0.0.1:8000/' + user.avatar "></el-avatar>
+                <div slot="content">{{user.username}}<br/>{{user.motto}}</div>
               </el-tooltip>
             </el-card>
           </el-row>
@@ -121,22 +123,22 @@
     mounted() {
       // 获取视频列表
       this.$http.get("apis/video/all/").then(res => {
-        this.video_data = res.data.data;
-        console.log(res.data.data)
+        this.video_data = res.data.results;
       }, err => {
         console.log(err)
       });
 
       // 获取最新用户
       this.$http.get("apis/user/").then(res => {
-        this.new_users = res.data
+        console.log(res.data.results);
+        this.new_users = res.data.results
       }, err => {
         console.log(err)
       });
 
       // 获取最新评论
       this.$http.get("apis/comment/").then(res => {
-        this.new_comments = res.data
+        this.new_comments = res.data.results
       }, err => {
         console.log(err)
       });
@@ -148,7 +150,7 @@
   .float_box {
     display: block;
     position: fixed;
-    right: 0;
+    right: 2%;
   }
 
   .header {

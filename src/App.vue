@@ -8,14 +8,8 @@
   export default {
     name: 'App',
     mounted() {
-      // this.$http.post("apis/csrftoken/").then(res => {
-      //   console.log(res)
-      // }, err => {
-      //   console.log(err)
-      // })
-
       this.axios.post("apis/csrftoken/").then(res => {
-        console.log(res)
+        // console.log(res)
       }, err => {
         console.log(err)
       })

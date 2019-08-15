@@ -19,6 +19,12 @@ Vue.use(VueAxios, axios);
 axios.defaults.baseURL = "http://127.0.0.1:8000";
 axios.defaults.withCredentials = true;
 
+// video vue
+import Video from 'video.js'
+import 'video.js/dist/video-js.css'
+
+Vue.prototype.$video = Video;
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
